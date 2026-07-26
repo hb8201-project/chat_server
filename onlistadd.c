@@ -1,0 +1,19 @@
+// onlistadd.c
+// 在线用户添加
+#include "my.h"
+
+void onlistadd(OnList *l, char *n)
+{
+    OnNode *node = malloc(sizeof(OnNode));
+    if (node == NULL)
+    {
+        perror("在线用户节点分配失败\n");
+        return;
+    }
+    strcpy(node->name, n);
+    node->next = NULL;
+    l->r->next = node;
+    l->r = node;
+
+    return ;
+}

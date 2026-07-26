@@ -12,25 +12,60 @@
 #include <netinet/in.h> // ip地址
 #include <arpa/inet.h> // 大小端转换
 
-// 用户名与密码
+#define UMAX 10 // 最大用户数
+#define NMAX 16 // 最大用户名长度
+#define KMAX 8 // 最大密码长度
+#define MMAX 256 // 单次最大离线消息长度
+
+// 存储用户信息
 typedef struct 
 {
-    char name[16]; // 用户名
-    int key[8]; // 密码
+    int fd; // TCP套接字
+    char name[NMAX]; // 用户名
+    int key[KMAX]; // 密码
 } User;
 
-// 在线用户
+// 在线用户节点
+typedef struct onnode
+{
+    char name[NMAX]; // 用户名
+    struct onnode *next; // 后继
+} OnNode;
+// 在线用户链表
 typedef struct
 {
-    char name[16]; // 在线用户
-} OnlineU;
+    OnNode *head; // 头节点
+    OnNode *r; // 尾指针
+} OnList;
 
-// 离线消息
+
+// 离线消息节点
+typedef struct offnode
+{
+    char fs[NMAX]; // 发送方
+    char js[NMAX]; // 接收方
+    char message[MMAX]; // 消息
+    struct offnode *next; // 后继
+} OffNode;
+// 离线消息链表
 typedef struct
 {
-    char fs[16]; // 发送方
-    char js[16]; // 接收方
-    char message[256]; // 消息
-} Offlinem;
+    OffNode *head; // 头节点
+    OffNode *r; // 尾指针
+} OffList;
+
+extern User user[UMAX]; // 用户信息
+extern int unumber; // 已存用户数量
+extern OnList onlist; // 在线用户链表
+extern OffList offlist; // 离线消息链表
+
+void onlistinit(OnList *l); // 在线用户链表初始化
+void onlistadd(OnList *l, char *n); // 在线用户添加
+void onlistdel(OnList *l, char *n); // 在线用户删除(删除指定用户)
+void offlistinit(OffList *l); // 离线消息链表初始化
+void offlistadd(OffList *l, char *c1, char *c2, char *c3); // 离线消息添加
+void offlistdel(OffList *l); // 离线消息删除(删除链表首个节点)
+
+
 
 #endif
