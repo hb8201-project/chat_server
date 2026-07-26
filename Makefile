@@ -7,11 +7,17 @@
 
 # 编译服务器
 server:my.h server.c onlistinit.c onlistadd.c onlistdel.c offlistinit.c \
-offlistadd.c offlistdel.c
+offlistadd.c offlistdel.c server_task.c finduser.c
 	cc server.c onlistinit.c onlistadd.c onlistdel.c offlistinit.c \
-offlistadd.c offlistdel.c -o server -pthread
+offlistadd.c offlistdel.c server_task.c finduser.c\
+ -o server -pthread
 
 # 编译客户端
+clinet:my.h clinet.c onlistinit.c onlistadd.c onlistdel.c offlistinit.c \
+offlistadd.c offlistdel.c 
+	cc clinet.c onlistinit.c onlistadd.c onlistdel.c offlistinit.c \
+offlistadd.c offlistdel.c \
+ -o clinet -pthread
 
 # 清理编译生成的程序
 .PHONY: clean
