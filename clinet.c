@@ -28,25 +28,60 @@ int main(int argc, char const *argv[])
     }
     while (1)
     {
-        printf("登录账号请输1，注册账号请输2：");
-        fgets(msg, sizeof(msg), stdin);
-        msg[strcspn(msg, "\r\n")] = '\0';
-        xie(fd, msg);
-        if (strncmp(msg, "1", 1) == 0)
+        if (du(fd, 0, buf) == -1)
         {
-printf("4");
-            cdenglu(fd);
-            break;
+            close(fd);
+            return -1;
         }
-        else if (strncmp(msg, "2", 1) == 0)
+        if (strcmp(buf, "登录账号请输1，注册账号请输2：") == 0)
         {
-printf("3");
-            czhuce(fd);
-            continue;;
+            printf("登录账号请输1，注册账号请输2：");
+            fgets(msg, sizeof(msg), stdin);
+            msg[strcspn(msg, "\r\n")] = '\0';
+            xie(fd, msg);
+
+            if (strcmp(msg, "1") == 0)
+            {
+                cdenglu(fd);
+                break;
+            }
+            else if (strcmp(msg, "2") == 0)
+            {
+                czhuce(fd);
+                continue;
+            }
+            else
+            {
+                printf("%s\n", buf);
+            }
         }
+        // else if (strcmp(buf, "请输入有效消息，登录账号请输1，注册账号请输2：") == 0)
+        //     printf("%s\n", buf);
+
+        // else if (strcmp(buf, "现在已登录，可以发送消息（只是演示）") == 0)
+        // {
+        //     printf("登录成功，进入消息模式（exit退出）\n");
+        //     // 消息循环
+        //     while (1)
+        //     {
+        //         printf("> ");
+        //         fgets(msg, sizeof(msg), stdin);
+        //         msg[strcspn(msg, "\r\n")] = '\0';
+        //         xie(fd, msg);
+        //         if (strcmp(msg, "exit") == 0)
+        //             break;
+        //         if (du(fd, 1, buf) == -1)
+        //         {
+        //             close(fd);
+        //             return -1;
+        //         }
+        //     }
+        //     break;
+        // }
         else
         {
-            printf("输入无效，请重新输入\n");
+            // 其他情况
+            printf("%s\n", buf);
         }
     }
     

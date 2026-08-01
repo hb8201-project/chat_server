@@ -2,7 +2,7 @@
 // 在线用户添加
 #include "my.h"
 
-void onlistadd(OnList *l, char *n)
+void onlistadd(OnList *l, char *n, int fd)
 {
     OnNode *node = malloc(sizeof(OnNode));
     if (node == NULL)
@@ -11,6 +11,7 @@ void onlistadd(OnList *l, char *n)
         return;
     }
     strcpy(node->name, n);
+    node->fd = fd;
     node->next = NULL;
     l->r->next = node;
     l->r = node;

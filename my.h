@@ -17,8 +17,6 @@
 #define KMAX 8 // 最大密码长度
 #define MMAX 256 // 单次最大离线消息长度
 
-#define MSG_HEAD_LEN 4 // 防止TCP粘包
-
 // 存储用户信息
 typedef struct 
 {
@@ -61,18 +59,26 @@ extern int unumber; // 已存用户数量
 extern OnList onlist; // 在线用户链表
 extern OffList offlist; // 离线消息链表
 
+// 链表操作
 void onlistinit(OnList *l); // 在线用户链表初始化
-void onlistadd(OnList *l, char *n); // 在线用户添加
+void onlistadd(OnList *l, char *n, int fd); // 在线用户添加
 void onlistdel(OnList *l, char *n); // 在线用户删除(删除指定用户)
 void offlistinit(OffList *l); // 离线消息链表初始化
 void offlistadd(OffList *l, char *c1, char *c2, char *c3); // 离线消息添加
 void offlistdel(OffList *l); // 离线消息删除(删除链表首个节点)
 int finduser(char *name); // 查找用户结构体数组是否重复
-void *server_task(void *p); // 服务器线程入口函数
-void szhuce(int fd); // 用户账号注册（服务器）
+
+// 读写操作
 int du(int fd, int n, char *buf); // 从服务器或者客户端读取信息选择是否打印出来 0不打印 1打印,返回是否断开连接
 void xie(int fd, char *msg); // 向服务器或者客户端发送消息
+
+// 服务端
+void *server_task(void *p); // 服务器线程入口函数
+void szhuce(int fd); // 用户账号注册（服务器）
 int sdenglu(int fd, char *name); // 用户登录操作（服务器），返回成功或失败
+
+// 客户端
+void czhuce(int fd); // 用户账号注册（客户端）
 void cdenglu(int fd); // 用户登录操作（客户端）
 
 #endif

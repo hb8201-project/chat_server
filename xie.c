@@ -4,21 +4,20 @@
 
 void xie(int fd, char *msg)
 {
-    int len = strlen(msg);
-    int new_len = htonl(len);
-    if (write(fd, &new_len, MSG_HEAD_LEN) != MSG_HEAD_LEN)
+    if (write(fd, "#", 1) != 1)
     {
-        perror("发送长度头失败\n");
+        perror("#发送失败");
         return;
     }
-
-    if (len > 0)
+    int len = strlen(msg);
+    if (write(fd, msg, len) != len)
     {
-        int n = write(fd, msg, len);
-        if (n != len)
-        {
-            perror("发送消息失败\n");
-            return;
-        }
+        perror("msg发送失败");
+        return;
+    }
+    if (write(fd, "\n", 1) != 1)
+    {
+        perror("\n发送失败");
+        return;
     }
 }

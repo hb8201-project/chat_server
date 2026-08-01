@@ -8,73 +8,60 @@ void szhuce(int fd)
     char msg[1024];
     if (unumber >= UMAX)
     {
-        strcpy(msg, "服务器用户已满，注册失败！");
-        xie(fd, msg);
+        xie(fd, "服务器用户已满，注册失败！");
         return;
     }
-    strcpy(msg, "请设置用户名（最大16个字符）：");
-    xie(fd, msg);
+
+    xie(fd, "请设置用户名（最大16个字符）：");
     while (1)
     {
         if(du(fd, 0, buf) == -1)
-        {
             return ;
-        }
 
         if (strlen(buf) == 0)
         {
-            strcpy(msg, "用户名不能为空，请重新输入：");
-            xie(fd, msg);
+            xie(fd, "用户名不能为空，请重新输入：");
             continue;
         }
         if (strlen(buf) >= NMAX)
         {
-            strcpy(msg, "超过16个字符，请重新输入：");
-            xie(fd, msg);
+            xie(fd, "超过16个字符，请重新输入：");
             continue;
         }
         if (finduser(buf) != 0)
         {
-            strcpy(msg, "用户名重复，请重新输入：");
-            xie(fd, msg);
+            xie(fd, "用户名重复，请重新输入：");
             continue;
         }
         if (unumber >= UMAX)
         {
-            strcpy(msg, "服务器用户已满，注册失败！");
-            xie(fd, msg);
+            xie(fd, "服务器用户已满，注册失败！");
             return;
         }
         strcpy(user[unumber].name, buf);
         break;
     }
     // 密码操作
-    strcpy(msg, "请设置密码（最大8个字符）：");
-    xie(fd, msg);
+    xie(fd, "请设置密码（最大8个字符）：");
     while (1)
     {
         if (du(fd, 0, buf) == -1)
-        {
             return ;
-        }
 
         if (strlen(buf) == 0)
         {
-            strcpy(msg, "密码不能为空，请重新输入：");
-            xie(fd, msg);
+            xie(fd, "密码不能为空，请重新输入：");
             continue;
         }
         if (strlen(buf) >= KMAX)
         {
-            strcpy(msg, "超过8个字符，请重新输入：");
-            xie(fd, msg);
+            xie(fd, "超过8个字符，请重新输入：");
             continue;
         }
         strcpy(user[unumber].key, buf);
         unumber++;
         break;
     }
-    strcpy(msg, "用户注册成功！\n");
-    xie(fd, msg);
+    xie(fd, "用户注册成功！");
     return;
 }

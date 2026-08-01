@@ -3,49 +3,33 @@
 #include "my.h"
 
 int du(int fd, int n, char *buf)
-{
-    int len;
-    int a = read(fd, &len, MSG_HEAD_LEN);
-    // 断开连接
-    if (a <= 0)
-    {
-        return -1;
-    }
-    // 读取不完整
-    if (a != MSG_HEAD_LEN)
-    {
-        return -1;
-    }
-    len = ntohl(len);
-    // 空
-    if (len == 0)
-    {
-        buf[0] = '\0';
-        return 0;
-    }
-    // 消息过长
-    if (len >= 1024)
-    {
-        printf("消息过长（不超过1024字节）\n");
-        return -1;
-    }
+{   
+    char ch;
+    int i = 0;
 
-
-    memset(buf, 0, 1024);
-    a = read(fd, buf, len);
-    if (a <= 0)
+    // 读取 #
+    while (1)
     {
-        return -1;
+        if (read(fd, &ch, 1) != 1)
+            return -1;
+        if (ch == '#')
+            break;
     }
-    // 字节数不对
-    if (a != (int)len)
+    // 一直读到\n
+    while (1)
     {
-        return -1;
+        if (read(fd, &ch, 1) != 1)
+            return -1;
+        if (ch == '\n')
+        {
+            buf[i] = '\0';
+            break;
+        }
+        if (i < 1023)
+            buf[i++] = ch;
     }
-    buf[a] = '\0';
-    if (n)
-    {
+    if (n == 1)
         printf("%s\n", buf);
-    }
+
     return 0;
 }
