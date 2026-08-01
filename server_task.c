@@ -53,7 +53,7 @@ void *server_task(void *p)
             continue;
         }
         else
-            xie(fd, "请输入有效消息，登录账号请输1，注册账号请输2：");
+            xie(fd, "请输入有效消息！");
     }
 
 cleanup:

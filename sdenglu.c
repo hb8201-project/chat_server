@@ -58,6 +58,7 @@ int sdenglu(int fd, char *name)
         strcpy(name, user[i].name);
         onlistadd(&onlist, name, fd);
         xie(fd, "登录成功!");
+        printf("用户 %s 已上线\n", name);
         return 0;
     }
 }

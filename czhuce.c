@@ -21,7 +21,8 @@ void czhuce(int fd)
             strcmp(buf, "用户名重复，请重新输入：") == 0 ||
             strcmp(buf, "请设置密码（最大8个字符）：") == 0 ||
             strcmp(buf, "密码不能为空，请重新输入：") == 0 ||
-            strcmp(buf, "超过8个字符，请重新输入：") == 0)
+            strcmp(buf, "超过8个字符，请重新输入：") == 0 ||
+            strcmp(buf, "请输入有效消息！") == 0)
         {
             printf("%s", buf);
             fgets(msg, sizeof(msg), stdin);
