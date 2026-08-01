@@ -2,7 +2,7 @@
 // 服务器
 #include "my.h"
 
-User user[UMAX - 1]; // 用户信息
+User user[UMAX]; // 用户信息
 int unumber = 0; // 已存用户数量
 OnList onlist; // 在线用户链表
 OffList offlist; // 离线消息链表

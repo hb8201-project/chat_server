@@ -17,17 +17,20 @@
 #define KMAX 8 // 最大密码长度
 #define MMAX 256 // 单次最大离线消息长度
 
+#define MSG_HEAD_LEN 4 // 防止TCP粘包
+
 // 存储用户信息
 typedef struct 
 {
-    char name[NMAX - 1]; // 用户名
-    int key[KMAX - 1]; // 密码
+    char name[NMAX]; // 用户名
+    char key[KMAX]; // 密码
 } User;
 
 // 在线用户节点
 typedef struct onnode
 {
-    char name[NMAX - 1]; // 用户名
+    char name[NMAX]; // 用户名
+    int fd;
     struct onnode *next; // 后继
 } OnNode;
 // 在线用户链表
@@ -41,9 +44,9 @@ typedef struct
 // 离线消息节点
 typedef struct offnode
 {
-    char fs[NMAX - 1]; // 发送方
-    char js[NMAX - 1]; // 接收方
-    char message[MMAX - 1]; // 消息
+    char fs[NMAX]; // 发送方
+    char js[NMAX]; // 接收方
+    char message[MMAX]; // 消息
     struct offnode *next; // 后继
 } OffNode;
 // 离线消息链表
@@ -53,7 +56,7 @@ typedef struct
     OffNode *r; // 尾指针
 } OffList;
 
-extern User user[UMAX - 1]; // 用户信息
+extern User user[UMAX]; // 用户信息
 extern int unumber; // 已存用户数量
 extern OnList onlist; // 在线用户链表
 extern OffList offlist; // 离线消息链表
@@ -66,6 +69,10 @@ void offlistadd(OffList *l, char *c1, char *c2, char *c3); // 离线消息添加
 void offlistdel(OffList *l); // 离线消息删除(删除链表首个节点)
 int finduser(char *name); // 查找用户结构体数组是否重复
 void *server_task(void *p); // 服务器线程入口函数
-
+void szhuce(int fd); // 用户账号注册（服务器）
+int du(int fd, int n, char *buf); // 从服务器或者客户端读取信息选择是否打印出来 0不打印 1打印,返回是否断开连接
+void xie(int fd, char *msg); // 向服务器或者客户端发送消息
+int sdenglu(int fd, char *name); // 用户登录操作（服务器），返回成功或失败
+void cdenglu(int fd); // 用户登录操作（客户端）
 
 #endif
