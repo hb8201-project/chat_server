@@ -13,8 +13,8 @@ offlistadd.c offlistdel.c server_task.c finduser.c szhuce.c du.c xie.c sdenglu.c
 -o server -pthread
 
 # 编译客户端
-clinet:my.h clinet.c cdenglu.c czhuce.c du.c xie.c
-	cc clinet.c cdenglu.c czhuce.c du.c xie.c \
+clinet:my.h clinet.c cdenglu.c czhuce.c du.c xie.c clinet_task.c
+	cc clinet.c cdenglu.c czhuce.c du.c xie.c clinet_task.c \
 -o clinet -pthread
 
 # 清理编译生成的程序

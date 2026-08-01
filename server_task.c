@@ -14,7 +14,7 @@ void *server_task(void *p)
 {
     int fd = *(int *)p;
     char buf[1024];
-    char msg[1050] = {0};
+    char msg[1024] = {0};
     char uname[NMAX] = {0};   // 存在线用户名
 
     xie(fd, "连接成功！");
@@ -33,16 +33,59 @@ void *server_task(void *p)
         {
             if (sdenglu(fd, uname) == -1)
                 goto cleanup;
-            xie(fd, "现在已登录，可以发送消息（只是演示）");
+            xie(fd, "现在已登录，可以发送消息（@用户名 消息）");
 
+            // 私聊消息循环
             while (1)
             {
                 if (du(fd, 0, buf) == -1)
                     goto cleanup;
                 if (strcmp(buf, "exit") == 0)
                     break;
-                sprintf(msg, "服务器回显：%s", buf);
-                xie(fd, msg);
+                // 检查消息格式
+                if (buf[0] == '@')
+                {
+                    char duixiang[NMAX] = {0};
+                    char xiaoxi[MMAX] = {0};
+                    // 获取信息格式中空格的位置
+                    char *kongge = strchr(buf, ' ');
+                    if (kongge == NULL)
+                    {
+                        xie(fd, "格式错误，请使用 @用户名 消息");
+                        continue;
+                    }
+                    // 获取用户名长度
+                    int len = kongge - buf - 1;
+                    if (len <= 0 || len >= NMAX)
+                    {
+                        xie(fd, "用户名长度不合法（1-15字符）");
+                        continue;
+                    }
+                    strncpy(duixiang, buf + 1, len);
+                    duixiang[len] = '\0';
+                    strcpy(xiaoxi, kongge + 1);
+
+                    // 查找在线用户
+                    OnNode *node = onlist.head->next;
+                    int found = 0;
+                    while (node != NULL)
+                    {
+                        if (strcmp(node->name, duixiang) == 0)
+                        {
+                            found = 1;
+                            break;
+                        }
+                        node = node->next;
+                    }
+                    if (found)
+                    {
+                        char send_msg[NMAX + MMAX + 10];
+                        snprintf(send_msg, sizeof(send_msg), "%s：%s", uname, xiaoxi);
+                        xie(node->fd, send_msg);
+                    }
+                    else
+                        xie(fd, "目标用户不在线，消息未缓存");
+                }
             }
             break;
         }

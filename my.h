@@ -53,6 +53,12 @@ typedef struct
     OffNode *head; // 头节点
     OffNode *r; // 尾指针
 } OffList;
+// 客户端入口函数参数
+typedef struct
+{
+    int fd;     // 客户端套接字描述符
+    int running; // 是否运行
+} Fd;
 
 extern User user[UMAX]; // 用户信息
 extern int unumber; // 已存用户数量
@@ -80,5 +86,6 @@ int sdenglu(int fd, char *name); // 用户登录操作（服务器），返回�
 // 客户端
 void czhuce(int fd); // 用户账号注册（客户端）
 void cdenglu(int fd); // 用户登录操作（客户端）
+void *clinet_task(void *p); // 客户端入口函数
 
 #endif

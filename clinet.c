@@ -2,6 +2,7 @@
 // 客户端
 #include "my.h"
 
+
 int main(int argc, char const *argv[])
 {
     // TCP套接字
@@ -39,10 +40,32 @@ int main(int argc, char const *argv[])
             fgets(msg, sizeof(msg), stdin);
             msg[strcspn(msg, "\r\n")] = '\0';
             xie(fd, msg);
-
+            
             if (strcmp(msg, "1") == 0)
             {
                 cdenglu(fd);
+                // 登录成功，创建接收线程
+                Fd clinet_fd;
+                clinet_fd.fd = fd;
+                clinet_fd.running = 1;
+
+                pthread_t t;
+                pthread_create(&t, NULL, clinet_task, &clinet_fd);
+                pthread_detach(t);
+
+                printf("已登录，请使用 @用户名 消息 格式私聊，输入exit退出\n");
+                while (clinet_fd.running)
+                {
+                    printf("> ");
+                    fgets(msg, sizeof(msg), stdin);
+                    msg[strcspn(msg, "\r\n")] = '\0';
+                    if (strcmp(msg, "exit") == 0)
+                    {
+                        clinet_fd.running = 0;
+                        break;
+                    }
+                    xie(fd, msg);
+                }
                 break;
             }
             else if (strcmp(msg, "2") == 0)
@@ -55,29 +78,6 @@ int main(int argc, char const *argv[])
                 printf("%s\n", buf);
             }
         }
-        // else if (strcmp(buf, "请输入有效消息，登录账号请输1，注册账号请输2：") == 0)
-        //     printf("%s\n", buf);
-
-        // else if (strcmp(buf, "现在已登录，可以发送消息（只是演示）") == 0)
-        // {
-        //     printf("登录成功，进入消息模式（exit退出）\n");
-        //     // 消息循环
-        //     while (1)
-        //     {
-        //         printf("> ");
-        //         fgets(msg, sizeof(msg), stdin);
-        //         msg[strcspn(msg, "\r\n")] = '\0';
-        //         xie(fd, msg);
-        //         if (strcmp(msg, "exit") == 0)
-        //             break;
-        //         if (du(fd, 1, buf) == -1)
-        //         {
-        //             close(fd);
-        //             return -1;
-        //         }
-        //     }
-        //     break;
-        // }
         else
         {
             // 其他情况
