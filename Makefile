@@ -6,9 +6,9 @@
 # 	编译命令（Tab开头）
 
 # 编译服务器
-server:my.h server.c onlistinit.c onlistadd.c onlistdel.c offlistinit.c \
+server:my.h server.c onlistinit.c onlistadd.c onlistdel.c offlistinit.c sendofflinemsg.c \
 offlistadd.c offlistdel.c server_task.c finduser.c szhuce.c du.c xie.c sdenglu.c
-	cc server.c onlistinit.c onlistadd.c onlistdel.c offlistinit.c \
+	cc server.c onlistinit.c onlistadd.c onlistdel.c offlistinit.c sendofflinemsg.c \
 offlistadd.c offlistdel.c server_task.c finduser.c szhuce.c du.c xie.c sdenglu.c \
 -o server -pthread
 

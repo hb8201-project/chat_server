@@ -82,6 +82,7 @@ void xie(int fd, char *msg); // 向服务器或者客户端发送消息
 void *server_task(void *p); // 服务器线程入口函数
 void szhuce(int fd); // 用户账号注册（服务器）
 int sdenglu(int fd, char *name); // 用户登录操作（服务器），返回成功或失败
+void sendofflinemsg(int fd, char *name); // 补发指定用户的离线消息
 
 // 客户端
 void czhuce(int fd); // 用户账号注册（客户端）

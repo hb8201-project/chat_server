@@ -35,6 +35,9 @@ void *server_task(void *p)
                 goto cleanup;
             xie(fd, "现在已登录，可以发送消息（@用户名 消息）");
 
+            // 用户上线后补发离线消息
+            sendofflinemsg(fd, uname);
+
             // 私聊消息循环
             while (1)
             {
@@ -65,6 +68,22 @@ void *server_task(void *p)
                     duixiang[len] = '\0';
                     strcpy(xiaoxi, kongge + 1);
 
+                    // 查找用户是否存在
+                    int a = 0;
+                    for (int i = 0; i < unumber; i++)
+                    {
+                        if (strcmp(user[i].name, duixiang) == 0)
+                        {
+                            a = 1;
+                            break;
+                        }
+                    }
+                    if (!a)
+                    {
+                        xie(fd, "目标用户不存在，请确认用户名");
+                        continue;
+                    }
+
                     // 查找在线用户
                     OnNode *node = onlist.head->next;
                     int found = 0;
@@ -84,7 +103,14 @@ void *server_task(void *p)
                         xie(node->fd, send_msg);
                     }
                     else
-                        xie(fd, "目标用户不在线，消息未缓存");
+                    {
+                        offlistadd(&offlist, uname, duixiang, xiaoxi);
+                        xie(fd, "目标用户不在线，消息已经缓存");
+                    }
+                }
+                else
+                {
+                    xie(fd, "请使用 @用户名 消息 格式发送");
                 }
             }
             break;
