@@ -1,5 +1,8 @@
 // onlistadd.c
 // 在线用户添加
+// 1. 在线用户链表
+// 2. 用户名
+// 3. 套接字描述符
 #include "my.h"
 
 void onlistadd(OnList *l, char *n, int fd)

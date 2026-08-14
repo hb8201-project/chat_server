@@ -1,5 +1,9 @@
 // offlistadd.c
 // 离线消息添加
+// 1. 离线消息链表
+// 2. 发送者
+// 3. 接收者
+// 4. 消息内容
 #include "my.h"
 
 void offlistadd(OffList *l, char *c1, char *c2, char *c3)
